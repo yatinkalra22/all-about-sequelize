@@ -20,24 +20,67 @@ const connection = new Sequelize(
   }
 );
 
-const Student = connection.define("student", {
-  first_name: {
-    type: Sequelize.STRING,
-    allowNull: false,
+const Student = connection.define(
+  "student",
+  {
+    first_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        startsWithUpperCase: function (firstNameContent) {
+          const firstCharater = firstNameContent.charAt(0);
+          const isInUpperCase = firstCharater === firstCharater.toUpperCase();
+          if (!isInUpperCase) {
+            throw new Error("First character must be in Upper Case only");
+          }
+        },
+      },
+    },
+    last_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    age: {
+      type: Sequelize.INTEGER,
+      validate: {
+        len: {
+          args: [1, 100],
+          msg: "Age must be between 1 to 100",
+        },
+      },
+    },
+    domestic_student: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
+    },
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: "Email address already in use!",
+      },
+      validate: {
+        isEmail: true,
+      },
+    },
   },
-  last_name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  age: {
-    type: Sequelize.INTEGER,
-  },
-});
+  {
+    timestamps: false,
+    freezeTableName: true,
+  }
+);
 
-connection.sync({ force: true }).then(function () {
-  Student.create({
-    first_name: "Jon",
-    last_name: "Dove",
-    age: 25,
+connection
+  .sync({ logging: console.log, force: true })
+  .then(function () {
+    Student.create({
+      first_name: "Jon",
+      last_name: "Doe",
+      email: "jon@doe.com",
+      age: 25,
+    });
+  })
+  .catch(function (error) {
+    console.log(error);
   });
-});
