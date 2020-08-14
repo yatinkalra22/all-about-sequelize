@@ -15,22 +15,18 @@
 
 1. Installation
 2. Models
-3. Migration
-4. Hooks
+3. Hooks
+4. Migration
 
 ---
 
 ### 1. Installation -
 
-[Sequelize Document reference](https://www.google.comhttps://sequelize.org/master/manual/getting-started.html)
-
-### DB Connection (postgres) -
-
-- `It accepts 3 parameter` -
-  new Sequelize(db_details, additional_options, )
+[Sequelize Document reference](https://sequelize.org/master/manual/getting-started.html)
 
 ##### Local DB connection -
 
+```
 const connection = new Sequelize(
 process.env.DB_NAME,
 process.env.DB_USER_NAME,
@@ -39,9 +35,11 @@ process.env.DB_PASSWORD,
 dialect: "postgres",
 }
 );
+```
 
 #### Remote DB connection -
 
+```
 const connection = new Sequelize(
 process.env.DB_NAME,
 process.env.DB_USER_NAME,
@@ -59,15 +57,7 @@ process.env.DB_PASSWORD,
 
 }
 );
-
-#### Converting object to db format -
-
-#### connection.sync();
-
-- `It accepts the following parameter` -
-  > 1.  sync({force: true}) - drop existing db and create a new one
-       **note :** not recommended to use in production
-  > 2.  sync({logging: console.log}) - printing logs in terminal
+```
 
 ### Database Schema:
 
@@ -102,8 +92,37 @@ process.env.DB_PASSWORD,
    - timestamps -> if you don't want created_at and updated_at in a table `eg: timestamps: false`
    - freezeTableName -> to pluralize the table name `eg: freezeTableName: true`
 
+#### connection.sync();
+
+- sync() converts javascript objects to db like data.
+- It accepts the following parameter -
+  > 1.  sync({force: true}) - drop existing db and create a new one
+       **note :** not recommended to use in production
+  > 2.  sync({logging: console.log}) - printing logs in terminal
+
 #### Model_Name.create() -
 
 - create() is used to insert data to the table.
 - DML commands.
 - It accepts column name with values
+
+### 3. Hooks -
+
+- [Hooks](https://sequelize.org/master/manual/hooks.html) are the life cycle events similar to the one in React.JS
+- There are different ways to implement hooks. One common way is to use build in methods as:
+
+```
+  beforeValidate:
+  afterValidate:
+  beforeCreate:
+  afterCreate:
+```
+
+- Hooks can be used before and after db connections too:
+
+```
+  sequelize.beforeConnect(callback)
+  sequelize.afterConnect(callback)
+  sequelize.beforeDisconnect(callback)
+  sequelize.afterDisconnect(callback)
+```

@@ -68,6 +68,21 @@ const Student = connection.define(
   {
     timestamps: false,
     freezeTableName: true,
+    // print the life cycle
+    hooks: {
+      beforeValidate: function () {
+        console.log("beforeValidate");
+      },
+      afterValidate: function () {
+        console.log("afterValidate");
+      },
+      beforeCreate: function () {
+        console.log("beforeCreate");
+      },
+      afterCreate: function () {
+        console.log("afterCreate");
+      },
+    },
   }
 );
 
