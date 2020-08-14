@@ -20,11 +20,24 @@ const connection = new Sequelize(
   }
 );
 
-const student = connection.define("student", {
-  name: Sequelize.STRING,
-  first_name: Sequelize.STRING,
-  last_name: Sequelize.STRING,
-  age: Sequelize.INTEGER,
+const Student = connection.define("student", {
+  first_name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  last_name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  age: {
+    type: Sequelize.INTEGER,
+  },
 });
 
-connection.sync();
+connection.sync({ force: true }).then(function () {
+  Student.create({
+    first_name: "Jon",
+    last_name: "Dove",
+    age: 25,
+  });
+});
