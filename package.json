@@ -1,0 +1,30 @@
+{
+  "name": "all-about-sequelize",
+  "version": "1.0.0",
+  "description": "All about Sequelize",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yatinkalra22/all-about-sequelize.git"
+  },
+  "author": "Yatin Kalra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yatinkalra22/all-about-sequelize/issues"
+  },
+  "homepage": "https://github.com/yatinkalra22/all-about-sequelize#readme"
+}
