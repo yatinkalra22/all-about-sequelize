@@ -63,12 +63,14 @@ process.env.DB_PASSWORD,
 
 #### Student
 
-| Property | Name       | Type   |
-| -------- | ---------- | ------ |
-| pk       | id         | int    |
-|          | first_name | String |
-|          | last_name  | String |
-|          | age        | int    |
+| Property | Name             | Type    |
+| -------- | ---------------- | ------- |
+| pk       | id               | int     |
+|          | first_name       | String  |
+|          | last_name        | String  |
+|          | age              | int     |
+|          | domestic_student | Boolean |
+|          | email            | String  |
 
 ---
 
@@ -77,7 +79,7 @@ process.env.DB_PASSWORD,
 #### connection.define() -
 
 - define() is used to create the structure of table.
-- DDL commands.
+- DDL command.
 - It accepts 3 parameter -
 
 1. table_name
@@ -87,7 +89,7 @@ process.env.DB_PASSWORD,
    - defaultValue -> sets default value of your choice and datatype `eg: defaultValue: true,`
    - unique -> not allow duplicate value `eg: unique: true`
    - primaryKey -> You can set your own primary key of table `eg: primaryKey: true`
-   - [validate](https://sequelize.org/master/manual/validations-and-constraints.html) -> check for set condition `eg: validate: { isEmail: true}`
+   - [validate](https://sequelize.org/master/manual/validations-and-constraints.html) -> checks for set condition `eg: validate: { isEmail: true}`
 3. additional_parameter -
    - timestamps -> if you don't want created_at and updated_at in a table `eg: timestamps: false`
    - freezeTableName -> to pluralize the table name `eg: freezeTableName: true`
@@ -96,15 +98,45 @@ process.env.DB_PASSWORD,
 
 - sync() converts javascript objects to db like data.
 - It accepts the following parameter -
-  > 1.  sync({force: true}) - drop existing db and create a new one
-       **note :** not recommended to use in production
-  > 2.  sync({logging: console.log}) - printing logs in terminal
+  - 1.  sync({force: true}) - drop existing db and create a new one
+        **note :** not recommended to use in production
+  - 2.  sync({logging: console.log}) - printing logs in terminal
 
 #### Model_Name.create() -
 
 - create() is used to insert data to the table.
-- DML commands.
-- It accepts column name with values
+- DML command.
+- It accepts column name with values.
+- You can allows only the selected parameter to be stored in the database.
+  -Example:
+
+```
+  Student.create(
+    Student.create(
+      {
+        first_name: "Jon",
+        last_name: "Doe",
+        email: "jon@doe.com",
+        school: "abc",
+        age: 25,
+        class_no: "1-A",
+        address: "Xyz"
+      },
+      { fields: ["first_name", "last_name", "email", "age"] }
+    );
+```
+
+#### Model_Name.bulkCreate() -
+
+- bulkCreate() is similar to create(), it just insert multiple data to the table.
+- you can also use the field function in the second argument.
+- It's fast but it skip validation. but you can enable it in the second parameter.
+- Additionally, you can ignore duplicate values `eg: ignoreDuplicates: true,`
+
+#### Model_Name.build() -
+
+- build() is similar to create(), but needs to save(), before making entry to db table.
+- It gives immediate reference of the model instance.
 
 ### 3. Hooks -
 

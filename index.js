@@ -89,12 +89,39 @@ const Student = connection.define(
 connection
   .sync({ logging: console.log, force: true })
   .then(function () {
-    Student.create({
-      first_name: "Jon",
-      last_name: "Doe",
-      email: "jon@doe.com",
-      age: 25,
-    });
+    Student.create(
+      {
+        first_name: "Jon",
+        last_name: "Doe",
+        email: "jon@doe.com",
+        school: "abc",
+        age: 25,
+      },
+      { fields: ["first_name", "last_name", "email", "age"] }
+    );
+  })
+  .then(function () {
+    Student.bulkCreate(
+      [
+        {
+          first_name: "Ron",
+          last_name: "Wisely",
+          email: "ron@ron.com",
+          age: 26,
+        },
+        {
+          first_name: "Harry",
+          last_name: "Potter",
+          email: "harry@harry.com",
+          age: 24,
+        },
+      ],
+      {
+        validate: true,
+        ignoreDuplicates: true,
+        fields: ["first_name", "last_name", "email", "age"],
+      }
+    );
   })
   .catch(function (error) {
     console.log(error);
