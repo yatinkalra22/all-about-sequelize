@@ -28,8 +28,8 @@ const Student = connection.define(
       allowNull: false,
       validate: {
         startsWithUpperCase: function (firstNameContent) {
-          const firstCharater = firstNameContent.charAt(0);
-          const isInUpperCase = firstCharater === firstCharater.toUpperCase();
+          const firstCharacter = firstNameContent.charAt(0);
+          const isInUpperCase = firstCharacter === firstCharacter.toUpperCase();
           if (!isInUpperCase) {
             throw new Error("First character must be in Upper Case only");
           }
@@ -71,19 +71,34 @@ const Student = connection.define(
     // print the life cycle
     hooks: {
       beforeValidate: function () {
-        console.log("beforeValidate");
+        console.log("student model beforeValidate");
       },
       afterValidate: function () {
-        console.log("afterValidate");
+        console.log("student model afterValidate");
       },
       beforeCreate: function () {
-        console.log("beforeCreate");
+        console.log("student model beforeCreate");
       },
       afterCreate: function () {
-        console.log("afterCreate");
+        console.log("student model afterCreate");
       },
     },
   }
+);
+
+const Feedback = connection.define(
+  "feedback",
+  {
+    feedbackContent: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    feedbackFrom: {
+      type: Sequelize.ENUM,
+      values: ["teacher", "student", "principal"],
+    },
+  },
+  { underscored: true }
 );
 
 connection
