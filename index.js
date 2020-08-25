@@ -98,8 +98,18 @@ const Feedback = connection.define(
       values: ["teacher", "student", "principal"],
     },
   },
-  { underscored: true }
+  {
+    underscored: true,
+    freezeTableName: true,
+  }
 );
+
+// setting relationship
+// student(1): feedback(M)
+Student.hasMany(Feedback, { onDelete: "cascade" });
+Feedback.belongsTo(Student, {
+  foreignKey: "studentId",
+});
 
 connection
   .sync({ logging: console.log, force: true })
