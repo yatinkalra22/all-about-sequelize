@@ -113,8 +113,8 @@ Feedback.belongsTo(Student, {
 
 connection
   .sync({ logging: console.log, force: true })
-  .then(function () {
-    Student.create(
+  .then(async function () {
+    const firstStudentCreated = await Student.create(
       {
         first_name: "Jon",
         last_name: "Doe",
@@ -124,9 +124,16 @@ connection
       },
       { fields: ["first_name", "last_name", "email", "age"] }
     );
-  })
-  .then(function () {
-    Student.bulkCreate(
+    // adding feedback
+    await Feedback.create({
+      feedbackFrom: "teacher",
+      feedbackContent: "Bright Student!!",
+      studentId: firstStudentCreated.id,
+    });
+    // deleting the user to delete feedback
+    await Student.destroy({ where: { id: firstStudentCreated.id } });
+
+    await Student.bulkCreate(
       [
         {
           first_name: "Ron",
@@ -148,6 +155,7 @@ connection
       }
     );
   })
+
   .catch(function (error) {
     console.log(error);
   });
