@@ -104,11 +104,63 @@ const Feedback = connection.define(
   }
 );
 
+const Class = connection.define(
+  "class",
+  {
+    className: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    underscored: true,
+    freezeTableName: true,
+  }
+);
+
+const Teacher = connection.define(
+  "teacher",
+  {
+    fullName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    qualification: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    underscored: true,
+    freezeTableName: true,
+  }
+);
+
 // setting relationship
-// student(1): feedback(M)
+// student(1) : feedback(M)
 Student.hasMany(Feedback, { onDelete: "cascade" });
 Feedback.belongsTo(Student, {
   foreignKey: "studentId",
+});
+
+// student(M) : class(1)
+Class.hasMany(Student);
+Student.belongsTo(Class, {
+  foreignKey: "classId",
+});
+
+// class(M) : teacher(M)
+Class.belongsToMany(Teacher, {
+  through: "class_teacher",
+  foreignKey: "classId",
+});
+Teacher.belongsToMany(Class, {
+  through: "class_teacher",
+  foreignKey: "teacherId",
 });
 
 connection
@@ -130,7 +182,12 @@ connection
       feedbackContent: "Bright Student!!",
       studentId: firstStudentCreated.id,
     });
-    // deleting the user to delete feedback
+    await Feedback.create({
+      feedbackFrom: "principal",
+      feedbackContent: "Keep progressing and keep learning",
+      studentId: firstStudentCreated.id,
+    });
+    // deleting the student, which delete all of his feedback
     await Student.destroy({ where: { id: firstStudentCreated.id } });
 
     await Student.bulkCreate(
